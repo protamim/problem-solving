@@ -1,93 +1,60 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <cmath>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-bool grater(int i, int j) { return (i > j); }
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
 
-int main()
-{
     int t;
     cin >> t;
-
-    while (t--)
-    {
-        int n;
-        cin >> n;
-
-        long long sum_all = 0;
-        vector<int> odd_nums;
-        vector<int> a(n);
-
-        for (int i = 0; i < n; i++)
-        {
-            cin >> a[i];
-
-            if (a[i] % 2 == 0)
-            {
-                sum_all += a[i];
+    while(t--){
+        int n, k;
+        cin >> n >> k;
+        int total = n * n;
+        if(k == total - 1){
+            cout << "NO\n";
+            continue;
+        }
+        cout << "YES\n";
+        vector<string> grid(n, string(n, '?'));
+        int rem = k;
+        // fill first with U's
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(rem > 0){
+                    grid[i][j] = 'U';
+                    rem--;
+                } else {
+                    // will fill later
+                    grid[i][j] = '?';
+                }
             }
-            else
-            {
-                odd_nums.push_back(a[i]);
+        }
+        // fill other rows except last row
+        for(int i = 0; i < n-1; i++){
+            for(int j = 0; j < n; j++){
+                if(grid[i][j] == '?'){
+                    grid[i][j] = 'D';
+                }
             }
         }
-
-        if (odd_nums.empty())
-        {
-            sum_all = 0;
+        // last row: create at least two trapped arrows
+        bool firstInLast = true;
+        for(int j = 0; j < n; j++){
+            if(grid[n-1][j] == '?'){
+                if(firstInLast){
+                    grid[n-1][j] = 'R';
+                    firstInLast = false;
+                } else {
+                    grid[n-1][j] = 'L';
+                }
+            }
         }
-
-        sort(odd_nums.begin(), odd_nums.end(), grater);
-        const int take = ceil((odd_nums.size()) / 2.0);
-
-        for (int i = 0; i < take; i++)
-        {
-            sum_all += odd_nums[i];
+        // print
+        for(int i = 0; i < n; i++){
+            cout << grid[i] << "\n";
         }
-
-        cout << sum_all << endl;
     }
 
     return 0;
 }
-
-/*
-- Problem overview
-mowerOff = true // initially
-mower toggles if odd numbers only
-
-If FJ visits the n fields in optimal order, what is the maximum total number of dandelions he can cut?
-
-- CASE 1
-6
-9 10 7 7 3 9
-Explanation:
-9 - (odd, mower turned on, cut the field)
-10 - (even, mower still on, cut the field)
-7 - (odd, mower turn off, no cut)
-7 -(odd, mower turn on, cut the field)
-3 - (odd, mower turn off, no cut)
-9 - (odd, mower turn on, cut the field)
-Result = 9 + 10 + 7 + 9 = 35
-
-- CASE 2
-6
-3 7 9 10 7 9
-Explanation:
-3 - (odd, mower turned on, cut the field)
-7 - (odd, mower off, no cut)
-9 - (odd, mower on, cut the field)
-10 - (even, mower still on, cut the field)
-7 - (odd, mower off, no cut)
-9 - (odd, mower on, cut the field)
-result = 3+9+10+9 = 31 - (wrong ans)
-
-- Try with another approach
-total sum = 45;
-odd numbers = 3,7,9,7,9 - sorted desc (9,9,7,7,3)
-sorted len = 5;
-toggle odd = 5/2
-*/
