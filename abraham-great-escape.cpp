@@ -1,6 +1,4 @@
 #include <iostream>
-#include <vector>
-
 using namespace std;
 
 int main()
@@ -13,26 +11,39 @@ int main()
         int n, k;
         cin >> n >> k;
 
-        int gs = n * n;
-
-        if (gs - 1 == k)
+        if (n * n - 1 == k)
         {
             cout << "NO \n";
         }
         else
         {
             cout << "YES \n";
-            int cc = 0;
-            int dcs = gs - k;
 
-            for (int i = 1; i <= n; i++)
+            int temp = n, x;
+            while (n--)
             {
-                for (int j = 1; j <= n; j++)
+                x = temp;
+                while (x--)
                 {
-                    cc += 1;
-                    if (gs == k || cc <= k)
+                    if (k != 0)
                     {
                         cout << "U";
+                        k--;
+                    }
+                    else
+                    {
+                        if (x == 0 && n != 0)
+                        {
+                            cout << "D";
+                        }
+                        else if (x == 0 && n == 0)
+                        {
+                            cout << "L";
+                        }
+                        else
+                        {
+                            cout << "R";
+                        }
                     }
                 }
                 cout << endl;
@@ -42,9 +53,3 @@ int main()
 
     return 0;
 }
-
-/*
----- PROBLEM SUMMARY ----
-The maze is an n*n grid with an arrow in each cells that points in one of four directions: up, down, right, and left.
-
-*/
